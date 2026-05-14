@@ -31,7 +31,7 @@ export default function TableOfContents({ headings }) {
     }
   }
 
-  const TocList = () => (
+  const TocItems = () => (
     <nav>
       {headings.map((h, i) => (
         <div
@@ -48,21 +48,45 @@ export default function TableOfContents({ headings }) {
 
   return (
     <>
-      {/* Mobile accordion */}
-      <button
-        className="toc-mobile-toggle"
-        onClick={() => setMobileOpen((v) => !v)}
-      >
-        <span>目次</span>
-        <span style={{ fontSize: '12px', color: '#5f5e5a' }}>{mobileOpen ? '▲' : '▼'}</span>
-      </button>
-      <div className={`toc-mobile-panel${mobileOpen ? ' open' : ''}`}>
-        <TocList />
+      {/* モバイル用アコーディオン */}
+      <div className="toc-mobile">
+        <button
+          className="toc-mobile-toggle"
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-expanded={mobileOpen}
+        >
+          <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="15" y2="12"/>
+              <line x1="3" y1="18" x2="12" y2="18"/>
+            </svg>
+            目次
+          </span>
+          <span style={{
+            fontSize: '11px',
+            color: '#5f5e5a',
+            transform: mobileOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.25s ease',
+            display: 'inline-block',
+          }}>▼</span>
+        </button>
+        <div
+          className="toc-mobile-panel"
+          style={{
+            maxHeight: mobileOpen ? '400px' : '0',
+            border: mobileOpen ? '0.5px solid #2c2c2a' : 'none',
+            padding: mobileOpen ? '12px 16px' : '0 16px',
+            transition: 'max-height 0.3s ease, padding 0.3s ease',
+          }}
+        >
+          <TocItems />
+        </div>
       </div>
 
-      {/* Desktop (sidebar shows this via CSS) */}
+      {/* デスクトップ用（サイドバー） */}
       <div className="toc-desktop">
-        <TocList />
+        <TocItems />
       </div>
     </>
   )

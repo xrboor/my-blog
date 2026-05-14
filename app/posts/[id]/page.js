@@ -1,6 +1,7 @@
 import { getPostData, getSortedPostsData } from '../../../lib/posts'
 import Link from 'next/link'
 import TableOfContents from './TableOfContents'
+import MobileToc from './MobileToc'
 
 export async function generateStaticParams() {
   const posts = getSortedPostsData()
@@ -27,7 +28,6 @@ export default async function Post({ params }) {
                       key={tag}
                       href={`/?tag=${encodeURIComponent(tag)}`}
                       className="article-tag"
-                      style={{ cursor: 'pointer', transition: 'opacity 0.2s ease' }}
                     >
                       {tag}
                     </Link>
@@ -36,6 +36,9 @@ export default async function Post({ params }) {
               )}
             </header>
             <hr className="article-divider" />
+            {postData.headings.length > 0 && (
+              <MobileToc headings={postData.headings} />
+            )}
             <div
               className="prose"
               dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
