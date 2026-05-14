@@ -51,7 +51,6 @@ export default async function Post({ params }) {
             <TableOfContents headings={postData.headings} />
           </div>
         )}
-
         <div className="sidebar-section fade-up delay-2">
           <div className="sidebar-label">タグ</div>
           {postData.tags.map((tag) => (

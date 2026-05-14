@@ -8,6 +8,7 @@ export default function PostList({ posts, tags }) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [activeTag, setActiveTag] = useState('すべて')
+  const [showAllTags, setShowAllTags] = useState(false)
 
   useEffect(() => {
     const tag = searchParams.get('tag')
@@ -23,33 +24,45 @@ export default function PostList({ posts, tags }) {
     }
   }
 
+  const visibleTags = showAllTags ? tags : tags.slice(0, 5)
+
   const filtered = activeTag === 'すべて'
     ? posts
     : posts.filter((p) => p.tags.includes(activeTag))
 
   return (
     <>
-      <div className="tag-filter">
-        <button
-          className={`tag-btn${activeTag === 'すべて' ? ' active' : ''}`}
-          onClick={() => handleTag('すべて')}
-        >
-          すべて
-        </button>
-        {tags.map((tag) => (
+      <div className="tag-filter-wrap">
+        <div className="tag-filter">
           <button
-            key={tag}
-            className={`tag-btn${activeTag === tag ? ' active' : ''}`}
-            onClick={() => handleTag(tag)}
+            className={`tag-btn${activeTag === 'すべて' ? ' active' : ''}`}
+            onClick={() => handleTag('すべて')}
           >
-            {tag}
+            すべて
           </button>
-        ))}
+          {visibleTags.map((tag) => (
+            <button
+              key={tag}
+              className={`tag-btn${activeTag === tag ? ' active' : ''}`}
+              onClick={() => handleTag(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+          {tags.length > 5 && (
+            <button
+              className="tag-btn"
+              onClick={() => setShowAllTags((v) => !v)}
+            >
+              {showAllTags ? '折りたたむ ↑' : `+${tags.length - 5} もっと見る`}
+            </button>
+          )}
+        </div>
       </div>
 
       <ul style={{ listStyle: 'none' }}>
         {filtered.map(({ id, date, title, tags, excerpt }, i) => (
-          <li key={id} className={`fade-up delay-${Math.min(i + 2, 5)}`}>
+          <li key={id} className={`fade-up delay-${Math.min(i + 1, 5)}`}>
             <Link href={`/posts/${id}`} className="post-card">
               {tags.length > 0 && (
                 <div className="post-card-tags">

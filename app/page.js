@@ -24,7 +24,6 @@ export default function Home() {
             </Link>
           ))}
         </div>
-
         <div className="sidebar-section fade-up delay-3">
           <div className="sidebar-label">最近の記事</div>
           {allPostsData.slice(0, 5).map(({ id, title, date }) => (
