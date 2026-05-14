@@ -1,4 +1,6 @@
 import './globals.css'
+import { getSortedPostsData } from '../lib/posts'
+import SearchModal from './SearchModal'
 
 export const metadata = {
   title: 'My Blog',
@@ -6,6 +8,8 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  const allPostsData = getSortedPostsData()
+
   return (
     <html lang="ja">
       <body>
@@ -27,12 +31,7 @@ export default function RootLayout({ children }) {
           <nav style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
             <a href="/" className="nav-link">Home</a>
             <a href="/about" className="nav-link">About</a>
-            <div className="search-box">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <span style={{ color: '#5f5e5a', fontSize: '12px' }}>検索...</span>
-            </div>
+            <SearchModal posts={allPostsData} />
           </nav>
         </header>
         {children}

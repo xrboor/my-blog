@@ -312,3 +312,27 @@ a { color: inherit; text-decoration: none; }
   .main-content { padding: 24px 16px; }
   .sidebar { padding: 24px 16px; }
 }
+
+/* Table */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6em 0;
+  font-size: 14px;
+}
+.prose th {
+  background: #1a1a18;
+  color: #f0ede6;
+  font-weight: 500;
+  padding: 10px 16px;
+  text-align: left;
+  border: 0.5px solid #2c2c2a;
+}
+.prose td {
+  padding: 10px 16px;
+  border: 0.5px solid #2c2c2a;
+  color: #b4b2a9;
+}
+.prose tr:nth-child(even) td {
+  background: #161614;
+}
