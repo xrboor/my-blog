@@ -1,5 +1,6 @@
 import { getPostData, getSortedPostsData } from '../../../lib/posts'
 import Link from 'next/link'
+import TableOfContents from './TableOfContents'
 
 export async function generateStaticParams() {
   const posts = getSortedPostsData()
@@ -9,44 +10,62 @@ export async function generateStaticParams() {
 export default async function Post({ params }) {
   const { id } = await params
   const postData = await getPostData(id)
+
   return (
-    <div className="fade-up">
-      <Link href="/" className="back-link">
-        ← 一覧に戻る
-      </Link>
+    <div className="site-layout">
+      <main className="main-content">
+        <div className="fade-up">
+          <Link href="/" className="back-link">← 一覧に戻る</Link>
+          <article>
+            <header className="article-header">
+              <div className="article-date">{postData.date}</div>
+              <h1 className="article-title">{postData.title}</h1>
+              {postData.tags.length > 0 && (
+                <div className="article-tags">
+                  {postData.tags.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/?tag=${encodeURIComponent(tag)}`}
+                      className="article-tag"
+                      style={{ cursor: 'pointer', transition: 'opacity 0.2s ease' }}
+                    >
+                      {tag}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </header>
+            <hr className="article-divider" />
+            <div
+              className="prose"
+              dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
+            />
+          </article>
+        </div>
+      </main>
 
-      <article>
-        <header style={{ marginBottom: '40px' }}>
-          <p style={{
-            color: '#5f5e5a',
-            fontSize: '12px',
-            letterSpacing: '0.06em',
-            marginBottom: '16px',
-          }}>
-            {postData.date}
-          </p>
-          <h1 style={{
-            color: '#f0ede6',
-            fontSize: '26px',
-            fontWeight: '500',
-            lineHeight: '1.4',
-            letterSpacing: '-0.01em',
-          }}>
-            {postData.title}
-          </h1>
-        </header>
+      <aside className="sidebar">
+        {postData.headings.length > 0 && (
+          <div className="sidebar-section fade-up delay-1">
+            <div className="sidebar-label">目次</div>
+            <TableOfContents headings={postData.headings} />
+          </div>
+        )}
 
-        <hr style={{
-          border: 'none',
-          borderTop: '0.5px solid #2c2c2a',
-          marginBottom: '40px',
-        }} />
-
-        <div
-          className="prose"
-          dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
-        />
-      </article>
+        <div className="sidebar-section fade-up delay-2">
+          <div className="sidebar-label">タグ</div>
+          {postData.tags.map((tag) => (
+            <Link
+              key={tag}
+              href={`/?tag=${encodeURIComponent(tag)}`}
+              className="sidebar-tag"
+              style={{ display: 'inline-block' }}
+            >
+              {tag}
+            </Link>
+          ))}
+        </div>
+      </aside>
     </div>
   )
 }
